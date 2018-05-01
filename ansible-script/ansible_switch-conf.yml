@@ -40,10 +40,11 @@
     
     - name: copy script
       copy:
-        remote_src: ${PWD}/create-ofswitch.sh
-        dest: /root
+        src: create-ofswitch.sh
+        dest: /root/create-ofswitch.sh
         owner: root
         group: root
+        mode: 0777
 
     - name: load create_ofswitch script
       shell: "cat create_ofswitch.sh"
