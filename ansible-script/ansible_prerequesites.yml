@@ -1,7 +1,7 @@
 #Ansible OVS
 ---
 - name: Install OVS & Prerequesites
-  hosts: localhost
+  hosts: all
   become: true
 
   tasks:
