@@ -28,7 +28,7 @@ RUN apt-get update ; apt-get install -y python3-pip python3-setuptools
 RUN pip3 install --upgrade pip
 RUN pip3 install ryu influxdb tox
 
-RUN export PATH=$PATH:/usr/share/openvswitch/script
+ENV PATH="$PATH:/usr/share/openvswitch/scripts"
 
 ADD create_ofswitch.sh /root
 ADD start_ofswitch.sh /root
@@ -36,4 +36,12 @@ ADD start_ofswitch.sh /root
 ENV HOME /root
 WORKDIR /root
 
-CMD ["bash","create_ofswitch.sh",";","bash","start_ofswitch.sh"]
+#RUN chmod 777 create_ofswitch.sh
+#RUN chmod 777 start_ofswitch.sh
+
+#RUN ./create_ofswitch.sh
+#RUN ./start_ofswitch.sh
+CMD ["bash","-c","create_ofswitch.sh",";","bash","-c","start_ofswitch.sh"]
+#CMD ["./start_ofswitch.sh"]
+
+#CMD ["bash"]

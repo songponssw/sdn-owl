@@ -1,4 +1,4 @@
-eth=(eno1 enp2s0 enp3s0)
+eth=(enp1s0 enp5s1 enp5s2)
 len=${#eth[@]}
 
 service NetworkManager stop
@@ -10,5 +10,5 @@ do
 done
 ifconfig ofswitch up
 
-ifconfig ofswitch 192.168.1.33 netmask 255.255.255.0
+ifconfig ofswitch 192.168.1.32 netmask 255.255.255.0
 route add default gw 192.168.1.1 ofswitch

@@ -1,4 +1,5 @@
-eth=(eno1 enp2s0 enp3s0)
+ovs-ctl start
+eth=(enp1s0 enp5s1 enp5s2)
 len=${#eth[@]}
 
 ovs-vsctl add-br ofswitch -- set bridge ofswitch protocols=OpenFlow10,OpenFlow11,OpenFlow12,OpenFlow13
