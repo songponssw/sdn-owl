@@ -38,8 +38,15 @@
     #   shell:
     #     command: ovs-ctl start
     
+    - name: copy script
+      copy:
+        remote_src: ${PWD}/create-ofswitch.sh
+        dest: /root
+        owner: root
+        group: root
+
     - name: load create_ofswitch script
-      command: "cat create_ofswitch.sh"
+      shell: "cat create_ofswitch.sh"
       register: create_script
     
     - name: load start_ofswitch script
@@ -66,13 +73,13 @@
         group: root
         mode: 0755 
     
-    - name: execute script
-      shell: "{{ item }}"
-      with_items:
-        - "/x/1.sh"
-        - "/x/2.sh"
-      async: 0
-      poll: 0 
+    # - name: execute script
+    #   shell: "{{ item }}"
+    #   with_items:
+    #     - "/x/1.sh"
+    #     - "/x/2.sh"
+    #   async: 0
+    #   poll: 0 
     
 
     # - name: Genrate Script

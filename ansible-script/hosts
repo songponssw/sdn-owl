@@ -1,3 +1,1 @@
-[switch]
-
-[controller]
+controller ansible_host=192.168.1.31 ansible_user=root ansible_port=22

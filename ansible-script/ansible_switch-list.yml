@@ -1,6 +1,6 @@
 ---
 - name: OpenFlow Switch Configuration
-  hosts: localhost
+  hosts: all
   become: true
 
   tasks:

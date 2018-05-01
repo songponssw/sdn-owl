@@ -9,11 +9,13 @@
       yum: 
         name=* 
         update_cache=yes
+
+    - name: Install epel-release
+      yum: name=epel-relase
     
     - name: Install prerequesite
       yum: name={{item}}
       with_items:
-          - epel-release
           - make 
           - gcc 
           - openssl-devel 
@@ -49,6 +51,7 @@
       
     - name: Enable Openvswitch
       systemd:
+        name: openvswitch
         enable: yes
     
     - include: ansible_install-docker.yml
