@@ -30,6 +30,10 @@ RUN pip3 install ryu influxdb tox
 
 RUN export PATH=$PATH:/usr/share/openvswitch/script
 
+ADD create_ofswitch.sh /root
+ADD start_ofswitch.sh /root
+
 ENV HOME /root
 WORKDIR /root
-CMD ["bash"]
+
+CMD ["bash","create_ofswitch.sh",";","bash","start_ofswitch.sh"]
