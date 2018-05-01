@@ -1,6 +1,6 @@
 ---
 - name: Get host information 
-  hosts: localhost
+  hosts: all
   become: true
   vars:
     eth:
