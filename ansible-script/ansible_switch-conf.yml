@@ -1,0 +1,91 @@
+---
+- name: Get host information 
+  hosts: localhost
+  become: true
+  vars:
+    eth:
+    # create_script:
+  vars_prompt:
+    - name: args
+      prompt: "Enter interfaces in OpenFlow Switich(en0 en1 ...)"
+      private: no
+    - name: ctrl_ip
+      prompt: "Controller IP address"
+      private: no
+    - name: ctrl_mask
+      prompt: "Controller netmask(255.x.x.x)"
+      private: no
+    - name: gateway
+      prompt: "Gateway IP address"
+      private: no 
+
+  tasks:
+    # - set_fact: 
+    #     eth: "{{ args.split(' ')}}"
+
+    # - debug:
+    #     msg: "{{ eth }}"
+    
+    # - name: Stop NetworkManager
+    #   service:
+    #     name: NetworkManager
+    #     stated: stopped
+      
+    # - name: Start Openvswitch
+    #   service:
+    #     name: Openvswitch
+    #     state: started
+    #   shell:
+    #     command: ovs-ctl start
+    
+    - name: load create_ofswitch script
+      command: "cat create_ofswitch.sh"
+      register: create_script
+    
+    - name: load start_ofswitch script
+      command: "cat start_ofswitch.sh"
+      register: start_script
+
+    - name: load script vars
+      set_fact:
+        var_script: "#!/bin/bash\neth=({{ args }})\nip={{ ctrl_ip }}\nmask={{ ctrl_mask }}\ngateway={{ gateway }}\n"
+
+    - name: Generate create_ofswitch.sh
+      copy: 
+        content: "{{ var_script }}{{ create_script.stdout }}"
+        dest: "/x/gen_create-ofswitch.sh"
+        owner: root
+        group: root
+        mode: 0755
+    
+    - name: Generate start_ofswitch.sh
+      copy: 
+        content: "{{ var_script }}{{ create_script.stdout }}"
+        dest: "/x/gen_start-ofswitch.sh"
+        owner: root
+        group: root
+        mode: 0755 
+    
+    - name: execute script
+      shell: "{{ item }}"
+      with_items:
+        - "/x/1.sh"
+        - "/x/2.sh"
+      async: 0
+      poll: 0 
+    
+
+    # - name: Genrate Script
+      # command: sed -i '1s/^/second chance\nijsfsdf\n/' txt
+      # command: "{{ item }}"
+      # with_items:
+      # - cat create_ofswitch.sh > script
+      # - sed -i '1s/^/eth=({{ args }})\nip={{ ctrl_ip }}\nport={{ ctrl_port }}\nmask={{ ctrl_mask }}\n/' script
+
+    # - name: Set interfaces ip 
+    #   script: date.sh
+    #   ignore_errors: yes
+    #   # async: 0
+    #   poll: 0
+
+      

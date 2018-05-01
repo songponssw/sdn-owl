@@ -1,0 +1,17 @@
+---
+- name: OpenFlow Switch Configuration
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Define interfadce ether type
+      set_fact:
+        ansible_eth: "{% set ansible_eth = ansible_eth|default([]) + [hostvars[inventory_hostname]['ansible_' + item]] %}{{ ansible_eth|list }}"
+      when: hostvars[inventory_hostname]['ansible_' + item]['type'] == 'ether'
+      with_items:
+        - "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+    
+    - name: List interface
+      debug:
+        msg: "Interface list : {% for key in ansible_eth  %}{{ key.device }} {% endfor %}" 
+ 

@@ -1,0 +1,54 @@
+#Ansible OVS
+---
+- name: Install OVS & Prerequesites
+  hosts: localhost
+  become: true
+
+  tasks:
+    - name: Update
+      yum: 
+        name=* 
+        update_cache=yes
+    
+    - name: Install prerequesite
+      yum: name={{item}}
+      with_items:
+          - epel-release
+          - make 
+          - gcc 
+          - openssl-devel 
+          - autoconf 
+          - automake 
+          - rpm-build 
+          - redhat-rpm-config 
+          - python-devel 
+          - python-six 
+          - openssl-devel 
+          - kernel-devel 
+          - kernel-debug-devel 
+          - libtool 
+          - wget 
+          - net-tools 
+          - jemalloc-devel 
+          - pciutils 
+          # - eth-tools 
+          - lshw
+
+    - name: Add repo Openvswitch
+      shell: 
+        echo -e $'[cloud7]\nname=CentOS Cloud7 Openstack\nbaseurl=https://cbs.centos.org/repos/cloud7-openstack-pike-release/x86_64/os/\nenabled=1\ngpgcheck=0'  > /etc/yum.repos.d/cloud7.repo
+
+    - name: Install Openvswitch
+      yum:
+        name: openvswitch
+
+    - name: add {{extra_path}} to path
+      lineinfile:
+        dest: ~/.bashrc
+        line: "export PATH=$PATH:/usr/bin:/usr/share/openvswitch/scripts"
+      
+    - name: Enable Openvswitch
+      systemd:
+        enable: yes
+    
+    - include: ansible_install-docker.yml
