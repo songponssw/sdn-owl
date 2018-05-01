@@ -1,0 +1,38 @@
+#docker-compose : Grafana, InfluxDB
+
+version: "3"
+
+services:
+    db:
+        container_name: influxdb
+        image: influxdb
+        environment:
+            TZ: Asia/Bangkok
+        environment:
+            - INFLUXDB_ADMIN_ENABLED=true 
+        ports:
+            - "8083:8083"
+            - "8086:8086"
+            - "8090:8090"
+ 
+    frontend:
+        container_name: grafana
+        image: grafana/grafana
+        environment:
+            TZ: Asia/Bangkok
+        ports:
+            - "3000:3000"
+        links:
+            - db
+
+    controller:
+        container_name: controller
+        image: my-controller
+        environment:
+            TZ: Asia/Bangkok
+        links:
+            - db
+        volumes:
+            - $PWD/influxdb:/influxdb
+        tty: True
+        privileged: True
