@@ -45,7 +45,7 @@
         owner: root
         group: root
         mode: 0777
-        remote_src: yes
+        # remote_src: yes
 
     - name: load create_ofswitch script
       shell: "cat create_ofswitch.sh"

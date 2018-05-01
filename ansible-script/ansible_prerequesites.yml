@@ -52,6 +52,6 @@
     - name: Enable Openvswitch
       systemd:
         name: openvswitch
-        enable: yes
+        enabled: yes
     
     - include: ansible_install-docker.yml
