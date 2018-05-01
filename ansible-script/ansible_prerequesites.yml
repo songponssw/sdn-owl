@@ -11,7 +11,7 @@
         update_cache=yes
 
     - name: Install epel-release
-      yum: name=epel-relase
+      yum: name=epel-release
     
     - name: Install prerequesite
       yum: name={{item}}
