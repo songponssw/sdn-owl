@@ -4,3 +4,4 @@ controller ansible_host=192.168.1.31 ansible_user=root ansible_port=22
 [switch]
 ovs1 ansible_host=192.168.1.32 ansible_user=root ansible_port=22
 ovs2 ansible_host=192.168.1.33 ansible_user=root ansible_port=22
+
