@@ -27,12 +27,18 @@ services:
 
     controller:
         container_name: controller
-        image: my-controller
+        #image: cyborgcat/sdn-owl_controller
+        image: my_controller
         environment:
             TZ: Asia/Bangkok
         links:
             - db
         volumes:
-            - $PWD/influxdb:/influxdb
+            - $PWD:/influxdb
         tty: True
+        stdin_open: true
         privileged: True
+        ports:
+            - "6653:6653"
+        expose:
+            - "6653"

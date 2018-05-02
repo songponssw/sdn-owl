@@ -100,9 +100,10 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         body = ev.msg.body
         # sw = ev.msg.datapath.address
         # print (sw)
-        # print(body)
+        print(body)
         # print(json.dumps(body))
 
+        ''' 
         for stat in ev.msg.body:
             ports = []
             x = []
@@ -125,13 +126,13 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
             x.append('PortStats: %s '
                      'ip_switch: %s '
                      'time: %s' %
-                     (ports, fire
+                     (ports,
                       str(ev.msg.datapath.address),
                       time.strftime("%Y-%m-%d %H:%M:%S.%f"[:-3])
                       ))
             # return json
             print json.dumps(x)
-
+        '''
         # print(json.dumps(ports))
         # x = 'PortStats: %s',ports
         # print(ports)

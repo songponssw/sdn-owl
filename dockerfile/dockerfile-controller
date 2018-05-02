@@ -9,5 +9,6 @@ RUN apt-get update ; apt-get install -y python3-pip python3-setuptools
 RUN pip3 install --upgrade pip
 RUN pip3 install ryu influxdb tox
 
-CMD ["bash"]
+WORKDIR /influxdb
+ENTRYPOINT ["/bin/bash"]
 
