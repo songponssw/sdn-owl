@@ -8,7 +8,7 @@ RUN bash -c 'apt-get install -y python-{colorama,dev,eventlet,lxml,msgpack,netad
 RUN apt-get update ; apt-get install -y python3-pip python3-setuptools
 RUN pip3 install --upgrade pip
 RUN pip3 install ryu influxdb tox
-
+RUN apt-get install vim tmux
 WORKDIR /influxdb
 ENTRYPOINT ["/bin/bash"]
 
