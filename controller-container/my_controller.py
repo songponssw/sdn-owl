@@ -131,7 +131,7 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                       time.strftime("%Y-%m-%d %H:%M:%S.%f"[:-3])
                       ))
             # return json
-            print json.dumps(x)
+            print(json.dumps(x))
         
         # print(json.dumps(ports))
         # x = 'PortStats: %s',ports
