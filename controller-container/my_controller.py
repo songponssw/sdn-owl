@@ -137,4 +137,46 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
         # x = 'PortStats: %s',ports
         # print(ports)
         # x = []
+    def addToInflux(host='db', port=8086):
+        """Instantiate a connection to the InfluxDB."""
+        user = 'root'
+        password = 'root'
+        dbname = 'ovs1'
+        dbuser = 'smly'
+        dbuser_password = 'my_secret_password'
+        # query = 'select * from cpu_load_short;'
+        json_body = [
+            {
+                "measurement": "ovs1",
+                "tags": {
+                    "host": "ovs01",
+                    "region": "us-west"
+                },
+                "fields": {
+                    "ofport_1": 0.64,
+                    "ofport_2": 3,
+             
+                }
+            }
+        ]
+
+        client = InfluxDBClient(host, port, user, password, dbname)
+
+        # print("Create database: " + dbname)
+        # client.create_database(dbname)
+
+        # print("Create a retention policy")
+        # client.create_retention_policy('awesome_policy', '3d', 3, default=True)
+
+        print("Switch user: " + dbuser)
+        client.switch_user(dbuser, dbuser_password)
+
+        print("Write points: {0}".format(json_body))
+        client.write_points(json_body)
+
+        # print("Querying data: " + query)
+        # result = client.query(query)
+
+        print("Result: {0}".format(result))
+
     

@@ -48,6 +48,8 @@ def main(host='db', port=8086):
     result = client.query(query)
 
     print("Result: {0}".format(result))
+    with MyClassJha as mc: 
+        
 
     # print("Switch user: " + user)
     # client.switch_user(user, password)
