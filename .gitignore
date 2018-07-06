@@ -1,2 +1,2 @@
 .DS_Store
-my_controller.py
+ansible-script/*.retry

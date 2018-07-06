@@ -1,0 +1,9 @@
+---
+- name : running setup
+  host: all
+  become: true
+
+  roles:
+  - { role: prerequisites, message: "prerequisites" }
+  - { role: list-interfaces, message: "list-interfaces" }
+  - { role: list-interfaces, message: "list-interfaces" }
