@@ -1,9 +1,13 @@
 ---
-- name : running setup
-  host: all
+- name: running setup
+  hosts: all
   become: true
+  
+  vars_prompt:
+    - name: roles_index
+      prompt: Enter "1" for role-prerequisites and "2" for list-interfaces 
+      private : no
 
   roles:
-  - { role: prerequisites, message: "prerequisites" }
-  - { role: list-interfaces, message: "list-interfaces" }
-  - { role: list-interfaces, message: "list-interfaces" }
+  - { "role": "prerequisites", when: roles_index == "1" }
+  - { "role": "list-interfaces", when: roles_index == "2"}

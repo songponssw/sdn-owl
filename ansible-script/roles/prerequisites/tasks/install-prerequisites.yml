@@ -1,9 +1,4 @@
 ---
-# - name: Install OVS & Prerequesites
-#   hosts: all
-#   become: true
-
-  # tasks:
 - name: Update
   yum:  
     name: "*"

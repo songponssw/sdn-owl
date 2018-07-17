@@ -1,18 +1,16 @@
 # list-interface main.yml
 ---
-- name: OpenFlow Switch Configuration
-  hosts: all
-  become: true
+- name: Define interfadce ether type
+  set_fact:
+    ansible_eth: "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
+  
+  # This list for ether type, but it bug for virtual switch interface type
+  # set_fact: 
+  #   ansible_eth: "{% set ansible_eth = ansible_eth|default([]) + [hostvars[inventory_hostname]['ansible_' + item]] %}{{ ansible_eth|list }}"
+  # when: hostvars[inventory_hostname]['ansible_' + item]['type'] == 'ether'
+  # with_items:
+  #   - "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
 
-  tasks:
-    - name: Define interfadce ether type
-      set_fact:
-        ansible_eth: "{% set ansible_eth = ansible_eth|default([]) + [hostvars[inventory_hostname]['ansible_' + item]] %}{{ ansible_eth|list }}"
-      when: hostvars[inventory_hostname]['ansible_' + item]['type'] == 'ether'
-      with_items:
-        - "{{ hostvars[inventory_hostname]['ansible_interfaces'] }}"
-    
-    - name: List interface
-      debug:
-        msg: "Interface list : {% for key in ansible_eth  %}{{ key.device }} {% endfor %}" 
- 
+- name: List interface
+  debug:
+    msg: "Interface list : {% for key in ansible_eth  %}{{ key.device }} {% endfor %}" 

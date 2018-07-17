@@ -1,0 +1,4 @@
+# prerequisties main.yml
+---
+- import_tasks: install-prerequisites.yml
+- import_tasks: install-docker.yml

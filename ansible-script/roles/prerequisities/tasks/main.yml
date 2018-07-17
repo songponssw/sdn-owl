@@ -1,7 +1,0 @@
-# prerequisties main.yml
----
-- name : import tasks
-  import_tasks: {{item}}
-  with_items:
-    - install-prerequisites.yml
-    - install-docker.yml

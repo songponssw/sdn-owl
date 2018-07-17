@@ -1,3 +1,4 @@
+# !!! Scratch
 # Generate script main.yml
 ---
 - name: Get host information 
