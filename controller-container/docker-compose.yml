@@ -20,25 +20,45 @@ services:
         image: grafana/grafana
         environment:
             TZ: Asia/Bangkok
+        volumes:
+            - $PWD/influxdb:/influxdb
         ports:
             - "3000:3000"
         links:
             - db
 
-    controller:
-        container_name: controller
-        #image: cyborgcat/sdn-owl_controller
-        image: my_controller
-        environment:
+    # controller:
+    #     container_name: controller
+    #     #image: cyborgcat/sdn-owl_controller
+    #     image: my_controller
+    #     environment:
+    #         TZ: Asia/Bangkok
+    #     links:
+    #         - db
+    #     volumes:
+    #         - $PWD:/influxdb
+    #     tty: True
+    #     stdin_open: true
+    #     privileged: True
+    #     ports:
+    #         - "6653:6653"
+    #     expose:
+    #         - "6653"
+
+    # For testing in Mininet
+    mininet:
+        container_name: mininet-testbed
+        image: iwaseyusuke/ryu-mininet 
+        environment: 
             TZ: Asia/Bangkok
         links:
             - db
-        volumes:
-            - $PWD:/influxdb
+        volumes:    
+            - $PWD:/workdir
+            - $PWD/influxdb:/influxdb
         tty: True
         stdin_open: true
         privileged: True
-        ports:
-            - "6653:6653"
         expose:
             - "6653"
+            - "8080"

@@ -1,2 +1,4 @@
 .DS_Store
 ansible-script/*.retry
+*.pyc
+*/__pycache__/
