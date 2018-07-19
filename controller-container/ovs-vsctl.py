@@ -2,7 +2,7 @@
 # ovs-vsctl
 from ryu.lib.ovs import vsctl
 
-OVSDB_ADDR = 'tcp:158.108.38.85:6640'
+OVSDB_ADDR = 'tcp:192.168.0.31:6640'
 ovs_vsctl = vsctl.VSCtl(OVSDB_ADDR)
 
 # Equivalent to

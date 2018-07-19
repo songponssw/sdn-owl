@@ -1,3 +1,4 @@
+#!/bin/python3
 # Copyright (C) 2016 Nippon Telegraph and Telephone Corporation.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,7 +15,7 @@
 # limitations under the License.
 
 from operator import attrgetter
-
+from influxdb import InfluxDBClient
 from ryu.app import simple_switch_13
 from ryu.controller import ofp_event
 from ryu.controller.handler import MAIN_DISPATCHER, DEAD_DISPATCHER, CONFIG_DISPATCHER
@@ -54,7 +55,6 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     def _flow_stats_reply_handler(self, ev):
 
         body = ev.msg.body
-        # print(body)
         self.logger.debug('Receive Message : ' +
                           time.strftime("%Y-%m-%d %H:%M:%S"))
         self.logger.debug('datapath         '
@@ -76,40 +76,31 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
     def _port_stats_reply_handler(self, ev):
         body = ev.msg.body
         for stat in ev.msg.body:
-            ports = []
-            x = []
-            ports.append('port_no=%d '
-                         'rx_packets=%d '
-                         'tx_packets=%d '
-                         'rx_bytes=%d '
-                         'tx_bytes=%d '
-                         'rx_dropped=%d '
-                         'tx_dropped=%d '
-                         'rx_errors=%d '
-                         'tx_errors=%d '
-                         'rx_frame_err=%d '
-                         'rx_over_err=%d '
-                         'rx_crc_err=%d '
-                         'collisions=%d '
-                         'duration_sec=%d '
-                         'duration_nsec=%d ' %
-                         (stat.port_no,
-                          stat.rx_packets, stat.tx_packets,
-                          stat.rx_bytes, stat.tx_bytes,
-                          stat.rx_dropped, stat.tx_dropped,
-                          stat.rx_errors, stat.tx_errors,
-                          stat.rx_frame_err, stat.rx_over_err,
-                          stat.rx_crc_err, stat.collisions,
-                          stat.duration_sec, stat.duration_nsec))
-            x.append('PortStats: %s '
-                     'ip_switch: %s '
-                     'time: %s' %
-                     (ports,
-                      str(ev.msg.datapath.address[0]),
-                      time.strftime("%Y-%m-%d %H:%M:%S.%f"[:-3])
-                      ))
-            pprint(x)
-            print("================================================\n")
+            portStat_data = [
+                {
+                    "measurement": "testbed",
+                    "fields": {
+                        "port_no": stat.port_no,
+                        "rx_pkts": stat.rx_packets,
+                        "tx_pkts": stat.tx_packets,
+                        "rx_bytes": stat.rx_bytes,
+                        "tx_bytes": stat.tx_bytes,
+                        "rx_dropped": stat.rx_dropped,
+                        "tx_dropped": stat.tx_dropped,
+                        "rx_errors": stat.rx_errors,
+                        "tx_errors": stat.tx_errors,
+                        "rx_frame_err": stat.rx_frame_err,
+                        "rx_over_err": stat.rx_over_err,
+                        "collisions": stat.collisions,
+                        "duration_sec": stat.duration_sec,
+                        "duration_nsec": stat.duration_nsec
+                    }
+                }
+            ]
+
+        portStat_data[0]["fields"]['switch_ip'] = str(
+            ev.msg.datapath.address[0])
+        self._addToInfluxDB(portStat_data)
 
     @set_ev_cls(ofp_event.EventOFPStateChange,
                 [MAIN_DISPATCHER, DEAD_DISPATCHER])
@@ -124,44 +115,12 @@ class SimpleMonitor13(simple_switch_13.SimpleSwitch13):
                 self.logger.debug('unregister datapath: %016x', datapath.id)
                 del self.datapaths[datapath.id]
 
-    def addToInflux(host='db', port=8086):
-        """Instantiate a connection to the InfluxDB."""
-        user = 'root'
-        password = 'root'
-        dbname = 'ovs1'
-        dbuser = 'smly'
-        dbuser_password = 'my_secret_password'
-        # query = 'select * from cpu_load_short;'
-        json_body = [
-            {
-                "measurement": "ovs1",
-                "tags": {
-                    "host": "ovs01",
-                    "region": "us-west"
-                },
-                "fields": {
-                    "ofport_1": 0.64,
-                    "ofport_2": 3,
-
-                }
-            }
-        ]
-
+    def _addToInfluxDB(self, sendPortStat_data, host='db', port=8086):
+        # pprint(sendPortStat_data)
+        user = 'owl'
+        password = 'sdnowl'
+        dbname = 'mydb'
         client = InfluxDBClient(host, port, user, password, dbname)
-
-        # print("Create database: " + dbname)
-        # client.create_database(dbname)
-
-        # print("Create a retention policy")
-        # client.create_retention_policy('awesome_policy', '3d', 3, default=True)
-
-        print("Switch user: " + dbuser)
-        client.switch_user(dbuser, dbuser_password)
-
-        print("Write points: {0}".format(json_body))
-        client.write_points(json_body)
-
-        # print("Querying data: " + query)
-        # result = client.query(query)
-
-        print("Result: {0}".format(result))
+        client.create_database(dbname)
+        client.write_points(sendPortStat_data)
+        print "Adding data to influxDB"
