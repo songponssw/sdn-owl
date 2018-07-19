@@ -1,4 +1,4 @@
-# Create Mininet Topo for testing controller.py
+# Create Mininet Topo for testing
 from mininet.topo import Topo
 
 
