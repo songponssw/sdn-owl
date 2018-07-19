@@ -1,3 +1,4 @@
+# Create Mininet Topo for testing controller.py
 from mininet.topo import Topo
 
 
@@ -13,12 +14,6 @@ class MyTopo(Topo):
 
         switch1 = self.addSwitch('s1')
         switch2 = self.addSwitch('s2')
-
-        # Set IP
-        # controller.setIP('192.168.0.1/24')
-        # switch1.setIP('192.168.0.2', 24)
-        # host1.setIP('192.168.0.3', 24)
-        # host2.setIP('192.168.0.4', 24)
 
         # Add links
         self.addLink(host1, switch1)

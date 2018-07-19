@@ -5,11 +5,9 @@ version: "3"
 services:
     db:
         container_name: influxdb
-        image: influxdb
-        environment:
-            TZ: Asia/Bangkok
-        environment:
-            - INFLUXDB_ADMIN_ENABLED=true 
+        image: influxdb:1.1
+        env_file: 
+            - 'influxdb.env'
         ports:
             - "8083:8083"
             - "8086:8086"
@@ -50,7 +48,7 @@ services:
         container_name: mininet-testbed
         image: iwaseyusuke/ryu-mininet 
         environment: 
-            TZ: Asia/Bangkok
+            - TZ=Asia/Bangkok
         links:
             - db
         volumes:    
