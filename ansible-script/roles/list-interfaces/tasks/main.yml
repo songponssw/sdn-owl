@@ -13,4 +13,4 @@
 
 - name: List interface
   debug:
-    msg: "Interface list : {% for key in ansible_eth  %}{{ key.device }} {% endfor %}" 
+    msg: "Interface list : {% for key in ansible_eth  %}{{ key }} {% endfor %}" 
