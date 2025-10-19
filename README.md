@@ -25,5 +25,3 @@
         ```
 4. Start controller 
 
-
-### Mininet 
